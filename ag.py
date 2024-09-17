@@ -172,5 +172,22 @@ geneticAlgorithm(
     mutationPercent = 0.1
 )
 
+# Problemas:
+# - rosenbrock
+# - rastrigin
+# - sphere
+
+# Seleções:
+# - Torneio
+# - Proporcionalidade
+
+# Cortes:
+# - 1 
+# - 2
+
+# Percentual de cruzamento padrão 0.75
+
+# Percentual de mutação padrão 0.1
+
 
 
