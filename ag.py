@@ -1,5 +1,6 @@
 import math
 import random
+import matplotlib.pyplot as plt 
 
 def generateGemoma(genomaSize, minRange, maxRange):
     genoma = [random.uniform(minRange, maxRange) for _ in range(genomaSize)]
@@ -132,13 +133,16 @@ def geneticAlgorithm(geracions,genomaSize,populationSize,minRange, maxRange,prob
     firstEvolutionGenoma = min(population, key= lambda genoma : fitness(genoma,problem))
     firstLessEvolutionGenoma = max(population, key= lambda genoma : fitness(genoma,problem))
 
-    print(f"Primeira população: {population}")
-    print("===================================================================================")
-    print(f"Melhor genoma com valor {fitness(firstEvolutionGenoma,problem)}")
-    print(f"Pior genoma com valor {fitness(firstLessEvolutionGenoma,problem)}")
-    print("===================================================================================")
+    # print(f"Primeira população: {population}")
+    # print("===================================================================================")
+    # print(f"Melhor genoma com valor {fitness(firstEvolutionGenoma,problem)}")
+    # print(f"Pior genoma com valor {fitness(firstLessEvolutionGenoma,problem)}")
+    # print("===================================================================================")
  
     bestGenomas = []
+    melhores = []
+    piores = []
+    c = []
 
     for geration in range(geracions):
         population = evolucion(population,problem,slice,minRange,maxRange,selectType,tournamentGenomas,percentSlice,mutationPercent)
@@ -151,26 +155,49 @@ def geneticAlgorithm(geracions,genomaSize,populationSize,minRange, maxRange,prob
         print(f"Melhor genoma com valor {fitness(evolutionGenoma,problem)}")
         print(f"Pior genoma com valor {fitness(lessEvolutionGenoma,problem)}")
         print("===================================================================================")
+        melhores.append(fitness(evolutionGenoma,problem))
+        piores.append(fitness(lessEvolutionGenoma,problem))
+        c.append(geration)
+        
     
-    print(f"Melhores genomas: {bestGenomas}")
+    # print(f"Melhores genomas: {bestGenomas}")
     betterGenoma = min(bestGenomas, key= lambda genoma: genoma["bestGenoma"])
 
-    print("===================================================================================")
-    print(f"Melhor genoma {betterGenoma["bestGenoma"]} na geração {betterGenoma["geration"]}")
-    print("===================================================================================")
+    plt.figure(figsize=(10, 6))
+    plt.plot(c, melhores, label='Melhor Genoma', color='green', marker='o')
+    plt.plot(c, piores, label='Pior Genoma', color='red', marker='x')
+
+    plt.xlabel('Geração')
+    plt.ylabel('Valor de Fitness')
+    plt.title('Melhor vs Pior Genoma por Geração')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    # print("===================================================================================")
+    # print(f"Melhor genoma {betterGenoma["bestGenoma"]} na geração {betterGenoma["geration"]}")
+    # print("===================================================================================")
+
+    
 
 geneticAlgorithm(
-    geracions=20,
-    genomaSize=30,
-    populationSize=30,
-    minRange=-5.12,
-    maxRange=5.12,
-    problem="rosenbrock",
-    slice=2,
-    selectType="Torneio",
-    percentSlice=0.75,
-    mutationPercent = 0.1
-)
+                    geracions=100,
+                    genomaSize=20,
+                    populationSize=30,
+                    minRange=-5.12,
+                    maxRange=5.12,
+                    problem="rosenbrock",
+                    slice=2,
+                    selectType="Proporcionalidade",
+                    percentSlice=0.75,
+                    mutationPercent=0.1
+                ) 
+
+# plt.plot(range(100), geneticAlgorithm, label='Melhor Fitness')
+# plt.xlabel('Geração')
+# plt.ylabel('Melhor Valor de Fitness')
+# plt.title('Convergência do GA')
+# plt.legend()
+# plt.show()
 
 # Problemas:
 # - rosenbrock
@@ -189,5 +216,54 @@ geneticAlgorithm(
 
 # Percentual de mutação padrão 0.1
 
+# def plotGraft(scenario1, scenario2,scenario3, execution=30):
 
+#     executions = execution
+
+#     scenarioConjunt = [scenario1,scenario2,scenario3]
+
+#     data = []
+
+#     for scenario in scenarioConjunt:
+#         resultsSceanrios = [] 
+#         for _ in range(executions):
+#             bestValue = geneticAlgorithm(
+#                     geracions=scenario["geracions"],
+#                     genomaSize=scenario["genomaSize"],
+#                     populationSize=scenario["populationSize"],
+#                     minRange=scenario["minRange"],
+#                     maxRange=scenario["maxRange"],
+#                     problem=scenario["problem"],
+#                     slice=scenario["slice"],
+#                     selectType=scenario["selectType"],
+#                     percentSlice=scenario["percentSlice"],
+#                     mutationPercent =scenario["mutationPercent"]
+#                 ) 
+#             resultsSceanrios.append(bestValue)
+    
+    
+#         data.append(resultsSceanrios)
+    
+#     # print(data)
+
+
+#     plt.figure(figsize=(8, 6))
+#     plt.boxplot(data, labels=[f'Cenário {index + 1}' for index, _ in enumerate(scenarioConjunt)])
+
+
+#     plt.title('Boxplot dos Melhores Valores Globais em Diferentes Cenários', fontsize=14)
+#     plt.xlabel('Cenários', fontsize=12)
+#     plt.ylabel('Melhores Valores Globais', fontsize=12)
+
+
+#     plt.show()
+
+# scenarios1 = {"geracions":100,"genomaSize":30,"populationSize":30,"minRange":-100,"maxRange":100,"problem":"sphere","slice":2,"selectType":"Proporcionalidade","percentSlice":0.75,"mutationPercent":0.1}
+# scenarios2 = {"geracions":100,"genomaSize":30,"populationSize":30,"minRange":-30,"maxRange":30,"problem":"sphere","slice":2,"selectType":"Proporcionalidade","percentSlice":0.75,"mutationPercent":0.1}
+# scenarios3 = {"geracions":100,"genomaSize":30,"populationSize":30,"minRange":-5.12,"maxRange":5.12,"problem":"sphere","slice":2,"selectType":"Proporcionalidade","percentSlice":0.75,"mutationPercent":0.1}
+
+# plotGraft(scenario1=scenarios1,
+#           scenario2=scenarios2,
+#           scenario3=scenarios3,
+#           execution=30)
 
